@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RTC Study Hub</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f3f6fb;
+  color:#172033;
+}
+
+header{
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  color:white;
+  text-align:center;
+  padding:28px 15px;
+}
+
+header h1{
+  font-size:30px;
+}
+
+header p{
+  margin-top:8px;
+  opacity:.9;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+
+.section-title{
+  margin:15px 0;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+}
+
+.card{
+  background:white;
+  padding:25px 15px;
+  border-radius:18px;
+  text-align:center;
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
+  cursor:pointer;
+  transition:.2s;
+}
+
+.card:active{
+  transform:scale(.96);
+}
+
+.card .icon{
+  font-size:42px;
+}
+
+.card h2{
+  margin-top:10px;
+}
+
+.card p{
+  color:#667085;
+  margin-top:6px;
+}
+
+.update-box{
+  background:white;
+  margin-top:25px;
+  padding:20px;
+  border-radius:18px;
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.update{
+  border-left:4px solid #2563eb;
+  padding:12px;
+  margin-top:12px;
+  background:#f7f9ff;
+  border-radius:8px;
+}
+
+button{
+  border:0;
+  padding:12px 18px;
+  border-radius:10px;
+  background:#2563eb;
+  color:white;
+  font-size:15px;
+  cursor:pointer;
+}
+
+.submit-btn{
+  width:100%;
+  margin-top:20px;
+  background:#16a34a;
+}
+
+/* POPUP */
+
+.popup-bg{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.popup{
+  background:white;
+  width:100%;
+  max-width:500px;
+  max-height:85vh;
+  overflow:auto;
+  border-radius:20px;
+  padding:25px;
+  position:relative;
+  animation:popup .2s ease;
+}
+
+@keyframes popup{
+  from{
+    transform:scale(.8);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.close{
+  position:absolute;
+  right:15px;
+  top:10px;
+  font-size:28px;
+  cursor:pointer;
+  color:#555;
+}
+
+.popup h2{
+  margin-bottom:18px;
+  padding-right:30px;
+}
+
+.popup-option{
+  background:#f3f6ff;
+  margin:10px 0;
+  padding:16px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.popup-option:active{
+  background:#dce7ff;
+}
+
+.subject{
+  padding:12px;
+  background:#f7f7f7;
+  margin:8px 0;
+  border-radius:8px;
+}
+
+input, textarea, select{
+  width:100%;
+  padding:12px;
+  margin:7px 0 14px;
+  border:1px solid #ccd3df;
+  border-radius:9px;
+  font-size:15px;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+footer{
+  text-align:center;
+  padding:30px 15px;
+  color:#667085;
+}
+
+@media(max-width:600px){
+  .cards{
+    grid-template-columns:1fr 1fr;
+  }
+
+  header h1{
+    font-size:25px;
+  }
+
+  .card{
+    padding:20px 8px;
+  }
+
+  .card .icon{
+    font-size:34px;
+  }
+
+  .card h2{
+    font-size:18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🏫 RTC Study Hub</h1>
+  <p>Class 11 & 12 Updates • Syllabus • Study Materials</p>
+</header>
+
+<div class="container">
+
+  <h2 class="section-title">Select Your Class</h2>
+
+  <div class="cards">
+
+    <div class="card" onclick="openClass(11)">
+      <div class="icon">📚</div>
+      <h2>Class 11</h2>
+      <p>Updates & Syllabus</p>
+    </div>
+
+    <div class="card" onclick="openClass(12)">
+      <div class="icon">🎓</div>
+      <h2>Class 12</h2>
+      <p>Updates & Syllabus</p>
+    </div>
+
+  </div>
+
+  <div class="update-box">
+    <h2>📢 Latest Updates</h2>
+
+    <div class="update" onclick="showNotice('School Update')">
+      <b>School Update</b>
+      <p>Tap to view details</p>
+    </div>
+
+    <div class="update" onclick="showNotice('Exam Update')">
+      <b>Exam Update</b>
+      <p>Tap to view details</p>
+    </div>
+
+    <button class="submit-btn" onclick="openSubmit()">
+      ➕ Submit Information
+    </button>
+  </div>
+
+</div>
+
+<footer>
+  RTC Study Hub © 2026
+</footer>
+
+
+<!-- CLASS POPUP -->
+
+<div class="popup-bg" id="classPopup">
+
+  <div class="popup">
+
+    <span class="close" onclick="closePopup('classPopup')">×</span>
+
+    <h2 id="classTitle">Class</h2>
+
+    <div class="popup-option" onclick="showSection('updates')">
+      📢 Updates / Notices
+    </div>
+
+    <div class="popup-option" onclick="showSection('syllabus')">
+      📚 Syllabus
+    </div>
+
+    <div class="popup-option" onclick="showSection('materials')">
+      📝 Study Material
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- CONTENT POPUP -->
+
+<div class="popup-bg" id="contentPopup">
+
+  <div class="popup">
+
+    <span class="close" onclick="closePopup('contentPopup')">×</span>
+
+    <h2 id="contentTitle"></h2>
+
+    <div id="content"></div>
+
+  </div>
+
+</div>
+
+
+<!-- SUBMIT POPUP -->
+
+<div class="popup-bg" id="submitPopup">
+
+  <div class="popup">
+
+    <span class="close" onclick="closePopup('submitPopup')">×</span>
+
+    <h2>➕ Submit Information</h2>
+
+    <p>Share useful information with your classmates.</p>
+
+    <label>Your Name</label>
+    <input id="name" placeholder="Enter your name">
+
+    <label>Class</label>
+    <select id="studentClass">
+      <option value="11">Class 11</option>
+      <option value="12">Class 12</option>
+    </select>
+
+    <label>Information Type</label>
+    <select id="type">
+      <option>Notice</option>
+      <option>Exam Update</option>
+      <option>Syllabus</option>
+      <option>Study Material</option>
+      <option>Other</option>
+    </select>
+
+    <label>Information</label>
+    <textarea id="information"
+      placeholder="Write the information here..."></textarea>
+
+    <button onclick="submitInformation()">
+      Submit
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+let selectedClass = 11;
+
+
+/* OPEN CLASS */
+
+function openClass(classNumber){
+
+  selectedClass = classNumber;
+
+  document.getElementById("classTitle").innerText =
+    "📚 Class " + classNumber;
+
+  document.getElementById("classPopup").style.display = "flex";
+}
+
+
+/* CLOSE POPUP */
+
+function closePopup(id){
+
+  document.getElementById(id).style.display = "none";
+}
+
+
+/* SHOW SECTION */
+
+function showSection(section){
+
+  closePopup("classPopup");
+
+  let title = "";
+  let html = "";
+
+  if(section === "updates"){
+
+    title = "📢 Class " + selectedClass + " Updates";
+
+    html = `
+      <div class="subject">
+        <b>School Notice</b>
+        <p>Important school updates will appear here.</p>
+      </div>
+
+      <div class="subject">
+        <b>Exam Date</b>
+        <p>Exam-related information will appear here.</p>
+      </div>
+    `;
+  }
+
+  if(section === "syllabus"){
+
+    title = "📚 Class " + selectedClass + " Syllabus";
+
+    html = `
+      <div class="subject">📘 Physics — Syllabus</div>
+      <div class="subject">🧪 Chemistry — Syllabus</div>
+      <div class="subject">📐 Mathematics — Syllabus</div>
+      <div class="subject">📖 English — Syllabus</div>
+      <div class="subject">💻 Computer — Syllabus</div>
+    `;
+  }
+
+  if(section === "materials"){
+
+    title = "📝 Class " + selectedClass + " Study Material";
+
+    html = `
+      <div class="subject">📘 Physics Notes</div>
+      <div class="subject">🧪 Chemistry Notes</div>
+      <div class="subject">📐 Mathematics Questions</div>
+      <div class="subject">📖 English Notes</div>
+    `;
+  }
+
+  document.getElementById("contentTitle").innerText = title;
+
+  document.getElementById("content").innerHTML = html;
+
+  document.getElementById("contentPopup").style.display = "flex";
+}
+
+
+/* NOTICE */
+
+function showNotice(title){
+
+  document.getElementById("contentTitle").innerText =
+    "📢 " + title;
+
+  document.getElementById("content").innerHTML = `
+    <div class="subject">
+      <b>Important Information</b>
+      <p style="margin-top:8px;">
+        Notice details will be displayed here.
+      </p>
+    </div>
+  `;
+
+  document.getElementById("contentPopup").style.display = "flex";
+}
+
+
+/* SUBMIT */
+
+function openSubmit(){
+
+  document.getElementById("submitPopup").style.display = "flex";
+}
+
+
+/* INFORMATION SUBMISSION */
+
+function submitInformation(){
+
+  let name = document.getElementById("name").value;
+  let studentClass = document.getElementById("studentClass").value;
+  let type = document.getElementById("type").value;
+  let information = document.getElementById("information").value;
+
+  if(name === "" || information === ""){
+
+    alert("Please fill all required information.");
+
+    return;
+  }
+
+  alert(
+    "✅ Information submitted successfully!\n\n" +
+    "Name: " + name +
+    "\nClass: " + studentClass +
+    "\nType: " + type
+  );
+
+  document.getElementById("name").value = "";
+  document.getElementById("information").value = "";
+
+  closePopup("submitPopup");
+}
+
+
+/* CLOSE WHEN TOUCHING OUTSIDE */
+
+document.querySelectorAll(".popup-bg").forEach(function(bg){
+
+  bg.addEventListener("click", function(e){
+
+    if(e.target === bg){
+      bg.style.display = "none";
+    }
+
+  });
+
+});
+
+</script>
+
+</body>
+</html>
